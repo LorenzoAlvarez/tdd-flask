@@ -9,7 +9,8 @@ license = "MIT"
 python = "^3.9"
 Flask = "^1.1.2"
 flask-restx = "^0.2.0"
-python-dotenv = "^0.15.0"
+Flask-SQLAlchemy = "^2.4.4"
+psycopg2-binary = "^2.8.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.2"
