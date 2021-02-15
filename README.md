@@ -1,4 +1,1 @@
-# tdd-flask
-test drive development with Flask and Docker
-
-![TDD Flask Course CI](https://github.com/LorenzoAlvarez/tdd-flask/workflows/TDD%20Flask%20Course%20CI/badge.svg)
+![CI to Docker Hub](https://github.com/LorenzoAlvarez/tdd-flask/workflows/CI%20to%20Docker%20Hub/badge.svg?branch=main)
