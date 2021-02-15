@@ -36,7 +36,7 @@ jobs:
         run: docker-compose exec -T api python -m pytest
       
       - name: Run flake8
-        run: docker-compose exec api flake8 src
+        run: docker-compose exec -T api flake8 src
       
       - name: Run Black
         run: docker-compose exec api black src --check
