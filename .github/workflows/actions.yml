@@ -24,8 +24,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Pull Image
-        run: docker pull $IMAGE:latest || true
+        run: docker pull ${IMAGE}:latest || true
       - name: Build the image
-        run: docker build --cache-from $IMAGE:latest --tag $IMAGE:latest --file ./Dockerfile.prod "."
+        run: docker build --cache-from ${IMAGE}:latest --tag ${IMAGE}:latest --file ./Dockerfile.prod "."
       - name: Push Image
-        run: docker push $IMAGE:latest
+        run: docker push ${IMAGE}:latest
