@@ -42,4 +42,4 @@ jobs:
         run: docker-compose exec api black src --check
       
       - name: Run isort
-        run: docker-compose exec api isort ssrc --check-only
+        run: docker-compose exec api isort src --check-only
