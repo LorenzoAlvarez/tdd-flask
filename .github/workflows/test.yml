@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: TEST
+name: Apply test
 
 # Controls when the action will run. 
 on:
@@ -25,17 +25,21 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       
+      - name: update compose to last version
+        run: docker-compose pull
+
+
       - name: Execute docker compose
         run: docker-compose up -d
       
       - name: Run script test
-        run: docker-compose exec api python -m pytest
+        run: docker-compose exec -T api python -m pytest
       
       - name: Run flake8
-        run: docker-compose exec api flake8 src
+        run: docker-compose exec -T api flake8 src
       
       - name: Run Black
-        run: docker-compose exec api black src --check
+        run: docker-compose exec -T api black src --check
       
       - name: Run isort
-        run: docker-compose exec api isort ssrc --check-only
+        run: docker-compose exec -T api isort ssrc --check-only
