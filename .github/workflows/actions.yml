@@ -42,6 +42,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+  
   test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -100,7 +101,7 @@ jobs:
           file: ./Dockerfile.prod
           builder: ${{ steps.buildx.outputs.name }}
           push: false
-          tags: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+          tags: registry.heroku.com/mighty-eyrie-44192/web
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       
@@ -108,7 +109,7 @@ jobs:
         run: echo ${{ secrets.HEROKU_AUTH_TOKEN }} | docker login --username foo --password-stdin registry.heroku.com
       
       - name: push
-        run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+        run: docker push registry.heroku.com/mighty-eyrie-44192/web
 
       - name: start script
         run: ./release.sh
