@@ -54,7 +54,6 @@ jobs:
       - name: update compose to last version
         run: docker-compose pull
 
-
       - name: Execute docker compose
         run: docker-compose up -d
       
@@ -71,9 +70,6 @@ jobs:
         run: docker-compose exec -T api isort src --check-only
   deploy:
     runs-on: ubuntu-latest
-    env:
-      HEROKU_APP_NAME: mighty-eyrie-44192
-      HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{HEROKU_APP_NAME}}/web
     steps:
       - uses: actions/checkout@v2
 
@@ -82,15 +78,36 @@ jobs:
       
       - name: change permission
         run: chmod +x ./release.sh
-      
-      - name: Build image
-        run: docker build --tag $HEROKU_REGISTRY_IMAGE --file ./Dockerfile.prod "."
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+         env:
+          HEROKU_APP_NAME: mighty-eyrie-44192
+          HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ HEROKU_APP_NAME }}/web
+        with:
+          context: ./
+          file: ./Dockerfile.prod
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: $HEROKU_REGISTRY_IMAGE
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
       
       - name: login
         run: docker login -u _ -p $HEROKU_AUTH_TOKEN registry.heroku.com
-      
-      - name: push image
-        run: docker push $HEROKU_REGISTRY_IMAGE
       
       - name: start script
         run: ./release.sh
