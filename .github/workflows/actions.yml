@@ -99,7 +99,7 @@ jobs:
           context: ./
           file: ./Dockerfile.prod
           builder: ${{ steps.buildx.outputs.name }}
-          push: true
+          push: false
           tags: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
@@ -107,5 +107,8 @@ jobs:
       - name: login
         run: docker login -u _ -p $secrets.HEROKU_AUTH_TOKEN registry.heroku.com
       
+      - name: push
+        run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+
       - name: start script
         run: ./release.sh
