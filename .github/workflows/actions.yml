@@ -78,8 +78,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Add CURL 
-        run: sudo apt-get update && apt-get -y install --no-cache CURL
+      - name: Add CURL -cach
+        run: sudo apt-get update && apt-get -y install CURL
       
       - name: change permission
         run: chmod +x ./release.sh
