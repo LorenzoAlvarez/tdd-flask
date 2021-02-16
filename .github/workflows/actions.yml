@@ -72,9 +72,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      DOCKER_DRIVER: overlay2
       HEROKU_APP_NAME: mighty-eyrie-44192
-      HEROKU_REGISTRY_IMAGE: registry.heroku.com/${HEROKU_APP_NAME}/web
+      HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{HEROKU_APP_NAME}}/web
     steps:
       - uses: actions/checkout@v2
 
