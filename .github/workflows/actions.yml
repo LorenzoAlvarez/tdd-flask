@@ -105,7 +105,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
       
       - name: login
-        run: docker login -u _ -p $secrets.HEROKU_AUTH_TOKEN registry.heroku.com
+        run: echo ${{ secrets.HEROKU_AUTH_TOKEN }} | docker login --username foo --password-stdin registry.heroku.com
       
       - name: push
         run: docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
