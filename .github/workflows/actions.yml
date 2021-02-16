@@ -3,8 +3,6 @@ name: CI to Docker Hub
 on:
   push:
     banches: [ main ]
-env:
-  HEROKU_APP_NAME: mighty-eyrie-44192
 
 jobs:
   build:
@@ -96,7 +94,7 @@ jobs:
 
       - name: Build and push
         env:
-          HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ HEROKU_APP_NAME }}/web
+          HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -109,7 +107,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
       
       - name: login
-        run: docker login -u _ -p $HEROKU_AUTH_TOKEN registry.heroku.com
+        run: docker login -u _ -p $secrets.HEROKU_AUTH_TOKEN registry.heroku.com
       
       - name: start script
         run: ./release.sh
