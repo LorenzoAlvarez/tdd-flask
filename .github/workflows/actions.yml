@@ -92,11 +92,11 @@ jobs:
             ${{ runner.os }}-buildx-
 
       - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-         env:
+        env:
           HEROKU_APP_NAME: mighty-eyrie-44192
           HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ HEROKU_APP_NAME }}/web
+        id: docker_build
+        uses: docker/build-push-action@v2
         with:
           context: ./
           file: ./Dockerfile.prod
