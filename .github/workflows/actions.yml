@@ -85,7 +85,7 @@ jobs:
         run: chmod +x ./release.sh
       
       - name: Build image
-        run: docker build --tag $HEROKU_REGISTRY_IMAGE --file ./Dockerfilee.prod "."
+        run: docker build --tag $HEROKU_REGISTRY_IMAGE --file ./Dockerfile.prod "."
       
       - name: login
         run: docker login -u _ -p $HEROKU_AUTH_TOKEN registry.heroku.com
