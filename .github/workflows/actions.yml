@@ -3,6 +3,8 @@ name: CI to Docker Hub
 on:
   push:
     banches: [ main ]
+env:
+  HEROKU_APP_NAME: mighty-eyrie-44192
 
 jobs:
   build:
@@ -68,6 +70,7 @@ jobs:
       
       - name: Run isort
         run: docker-compose exec -T api isort src --check-only
+  
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -93,7 +96,6 @@ jobs:
 
       - name: Build and push
         env:
-          HEROKU_APP_NAME: mighty-eyrie-44192
           HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{ HEROKU_APP_NAME }}/web
         id: docker_build
         uses: docker/build-push-action@v2
