@@ -1,6 +1,9 @@
 from sqlalchemy.sql import func
 
 from src import db
+from flask_admin.contrib.sqla import ModelView
+
+import os
 
 
 class User(db.Model):
@@ -16,3 +19,9 @@ class User(db.Model):
     def __init__(self, username, email):
         self.username = username
         self.email = email
+
+
+if os.getenv("FLASK_ENV") == "development":
+    from src import admin
+    from src.api.users.admin import UserAdminView
+    admin.add_view(UserAdminView(User, db.session))

@@ -1,3 +1,7 @@
+###########
+# BUILDER #
+###########
+
 #pull official base image
 FROM python:3.9.0-slim-buster
 
@@ -7,8 +11,6 @@ WORKDIR /usr/src/app
 # set envoronment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYHONUNBUFFERED 1
-ENV FLASK_ENV production
-ENV APP_SETTINGS src.config.ProductionConfig
 
 # install system dependencies
 RUN apt-get update \
@@ -19,11 +21,51 @@ RUN apt-get update \
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
 
-# add app
-COPY . .
-
 # install dependencies
 RUN poetry install
+RUN poetry build
+
+# add app
+COPY . .
+RUN flake8 src
+RUN black src --check
+RUN isort src --check-only
+
+#########
+# FINAL #
+#########
+
+# pull official base image
+FROM python:3.9.0-slim-buster
+
+# set work directory
+WORKDIR /usr/src/app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV FLASK_ENV production
+ENV APP_SETTINGS src.config.ProductionConfig
+ARG SECRET_KEY
+ENV SECRET_KEY $SECRET_KEY
+
+# install system dependencies
+RUN apt-get update \
+    && apt-get -y install netcat gcc postgresql libpq-dev \
+    && apt-get clean
+
+# add and install poetry
+RUN pip install poetry
+RUN poetry config virtualenvs.create false
+
+# install dependencies
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/pyproject.toml .
+RUN poetry install
+RUN poetry update
+
+# add app
+COPY . .
 
 # add and run as non-root user
 RUN adduser --disabled-password myuser
