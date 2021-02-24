@@ -2,6 +2,7 @@ import os
 
 from src import create_app, db
 
+
 def test_admin_view_dev():
     os.environ["FLASK_ENV"] = "development"
     assert os.getenv("FLASK_ENV") == "development"
